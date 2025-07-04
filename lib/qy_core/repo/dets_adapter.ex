@@ -1,0 +1,3 @@
+defmodule QyCore.Repo.DetsAdapter do
+  # ...
+end
