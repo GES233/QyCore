@@ -9,9 +9,10 @@ defmodule QyCore.Param do
   """
 
   alias QyCore.Param, as: P
+  alias QyCore.Repo, as: R
 
   # 分别对应着 refkey, raw value, pending
-  @type value :: {:ref, QyCore.Repo.refkey()} | [any()] | nil
+  @type value :: {:ref, R.repo_id(), R.refkey()} | [any()] | nil
 
   @type t :: %__MODULE__{
     name: atom(),
@@ -19,6 +20,7 @@ defmodule QyCore.Param do
     value: value(),
     metadata: P.Metadata.t() | map()
   }
+  # @enforce_keys [:name, :type]
   defstruct [
     :name,
     :type,
@@ -26,7 +28,15 @@ defmodule QyCore.Param do
     metadata: %P.Metadata{}
   ]
 
-  def ref?(%P{value: {:ref, _}}), do: true
+  def ref?(%P{value: {:ref, _, _}}), do: true
   def ref?(%P{value: [_ | _]}), do: false
-  # Maybe add load or update functions
+  def ref?(%P{value: nil}), do: false
+
+  # 针对值本身
+  # get_value/2
+  # put_value/2
+
+  # 针对元数据
+  # get_metadata/2
+  # put_metadata/2
 end

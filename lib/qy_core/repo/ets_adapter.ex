@@ -4,13 +4,12 @@ defmodule QyCore.Repo.EtsAdapter do
   # use GenServer
 
   # @ets_table_name :qy_param_repo_mem
-  # @dets_table_name :qy_param_repo_disk
+
   # 1. Implement function to initalize Repo via its name
   # (the name can be modified)
 
-  # 2. Implement function to get Repo via name.
+  # def start_link/1
 
-  # 3. API
-
-  # 4. Callbacks
+  # @impl QyCore.Repo
+  # def ready(args), do: apply(__MODULE__, :start_link, args)
 end

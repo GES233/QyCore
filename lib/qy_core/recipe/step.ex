@@ -37,6 +37,8 @@ defmodule QyCore.Recipe.Step do
   @type function_step ::
           {(data(), options() -> data()),
            input_keys: input_keys(), output_keys: output_keys(), opts: options()}
+  @type step_required_param ::
+          {module(), :required_param, input_keys: input_keys(), output_keys: output_keys(), opts: options()}
 
   @type t :: module_step() | function_step()
 
