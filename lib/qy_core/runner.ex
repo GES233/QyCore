@@ -3,5 +3,7 @@ defmodule QyCore.Runner do
   ...
   """
 
-  # @callback
+  # @callback pending(any()) :: :ok | {:error, term()}
+
+  # @callback execute(any(), inputs(), options()) :: {:ok, any()} | {:error, term()}
 end

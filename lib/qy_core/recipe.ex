@@ -28,4 +28,7 @@ defmodule QyCore.Recipe do
   对于其他承载相关逻辑的代码，建议在开发相关插件时使用
   `Qy<%= your_domain %>` 作为模块名，但是没有强制约束。
   """
+
+  # 线性 / DAG
+  # @type t :: [] | {}
 end
