@@ -1,7 +1,10 @@
 defmodule QyCore.Repo do
+  @type refkey :: any()
+  @type data :: any()
+
   @callback init(any()) :: pid()
 
-  @callback get(any()) :: {:ok, any()} | {:error, term()}
+  @callback get(refkey()) :: {:ok, data()} | {:error, term()}
 
-  @callback put(any()) :: {:ok, any()} | {:error, term()}
+  @callback put(data()) :: {:ok, refkey()} | {:error, term()}
 end

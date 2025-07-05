@@ -11,16 +11,31 @@ defmodule QyCore.Recipe.Step do
   虽然 `QyCore.Recipe.Step` 的灵感来源于 Elixir 生态中非常重要的 [`Plug`](https://hexdocs.pm/plug) ，但和
   Plug 不同的是，因为对于选项处理的复杂程度，目前只允许模块化的 `Step` （函数式待本应用基本完成后再考虑实现）。
   """
-  defstruct [
-    :input_keys,
-    :output_keys,
-    :init,
-    :call
-  ]
 
-  @type data :: any()
+  @type data :: any() | tuple()
   @type options :: any()
 
+  # 单一量可以省略吗？
+  # e.g. {foo} => foo
+  @type input_keys :: atom() | tuple()
+  @type output_keys :: atom() | tuple()
+
+  @type t ::
+          {module(), input_keys: input_keys(), output_keys: output_keys(), opts: options()}
+          | {(data(), options() -> data()),
+             input_keys: input_keys(), output_keys: output_keys(), opts: options()}
+
   @callback init(options()) :: options()
+
   @callback call(data(), options()) :: data()
+
+  # @callback hooks() :: %{atom() => function()}
+
+  # def hooks(), do: %{}
+  # defoverridable hooks: 0
+
+  # @spec exec(t(), data()) :: {:ok, data()} | {:error, term()}
+  def exec(_step, input) when is_tuple(input) do
+    # ...
+  end
 end
