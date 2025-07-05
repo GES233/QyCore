@@ -15,11 +15,11 @@ defmodule QyCore.Param do
   @type value :: {:ref, R.repo_id(), R.refkey()} | [any()] | nil
 
   @type t :: %__MODULE__{
-    name: atom(),
-    type: atom() | module(),
-    value: value(),
-    metadata: P.Metadata.t() | map()
-  }
+          name: atom(),
+          type: atom() | module(),
+          value: value(),
+          metadata: P.Metadata.t() | map()
+        }
   # @enforce_keys [:name, :type]
   defstruct [
     :name,

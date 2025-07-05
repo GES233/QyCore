@@ -24,7 +24,10 @@ defmodule QyCore.Recipe.Step do
   """
 
   @type data :: any() | tuple()
-  @type options :: any()
+  # 这个 options 要有几个特点：
+  # 读取简易、可以插入新值
+  # 所以没法照搬 Plug 的 t:opts/0
+  @type options :: tuple() | map() | list() | struct() | MapSet.t()
 
   # 单一量可以省略吗？
   # e.g. {foo} => foo
@@ -38,9 +41,12 @@ defmodule QyCore.Recipe.Step do
           {(data(), options() -> data()),
            input_keys: input_keys(), output_keys: output_keys(), opts: options()}
   @type step_required_param ::
-          {module(), :required_param, input_keys: input_keys(), output_keys: output_keys(), opts: options()}
+          {module(), :required_param,
+           input_keys: input_keys(), output_keys: output_keys(), opts: options()}
+  # 稍微提一嘴：这里的执行过程是把 param 本体丢到 init/1 的 options 里
+  # 因为如果数据本体容量很大，再处理来还得复制几份…
 
-  @type t :: module_step() | function_step()
+  @type t :: module_step() | function_step() | step_required_param()
 
   @callback init(options()) :: options()
 
