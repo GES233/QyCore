@@ -12,7 +12,7 @@ defmodule QyCore.Param do
   alias QyCore.Repo, as: R
 
   # 分别对应着 refkey, raw value, pending
-  @type value :: {:ref, R.repo_id(), R.refkey()} | [any()] | nil
+  @type value :: {:ref, R.repo_name(), R.refkey()} | [any()] | nil
 
   @type t :: %__MODULE__{
           name: atom(),

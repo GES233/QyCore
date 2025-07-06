@@ -6,6 +6,8 @@ defmodule QyCore.Recipe.Step do
 
   其 `Step` 的名称正好是相对于 `Recipe` 里的一步。
 
+  ## Step 的规范
+
   ## 实现自己的 `QyCore.Recipe.Step`
 
   虽然 `QyCore.Recipe.Step` 的灵感来源于 Elixir 生态中非常重要的 [`Plug`](https://hexdocs.pm/plug) 。

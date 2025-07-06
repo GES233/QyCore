@@ -29,6 +29,8 @@ defmodule QyCore.Recipe do
   `Qy<%= your_domain %>` 作为模块名，但是没有强制约束。
   """
 
+  alias QyCore.Recipe.Step, as: S
+
   # 线性 / DAG
-  # @type t :: [] | {}
+  @type t :: [S.t()] | {[S.t()], :digraph.graph()}
 end

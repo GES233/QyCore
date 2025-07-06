@@ -1,9 +1,13 @@
 defmodule QyCore.Runner do
   @moduledoc """
-  ...
+  定义运行时实现的功能。
   """
 
-  # @callback pending(any()) :: :ok | {:error, term()}
+  alias QyCore.Recipe.CookingContext, as: Context
 
-  # @callback execute(any(), inputs(), options()) :: {:ok, any()} | {:error, term()}
+  @callback valid?(Context.t()) :: :ok | {:error, term()}
+
+  @callback runnable?(Context.t()) :: :ok | {:error, term()}
+
+  @callback execute(Context.t()) :: Context.t() | {:error, term()}
 end
