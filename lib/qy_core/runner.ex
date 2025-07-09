@@ -3,7 +3,7 @@ defmodule QyCore.Runner do
   定义运行时实现的功能。
   """
 
-  alias QyCore.Recipe.CookingContext, as: Context
+  alias QyCore.Runner.CookingContext, as: Context
 
   @callback valid?(Context.t()) :: :ok | {:error, term()}
 

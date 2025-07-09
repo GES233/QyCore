@@ -1,5 +1,7 @@
-defmodule QyCore.Recipe.CookingContext do
-  @moduledoc "运行上下文"
+defmodule QyCore.Runner.CookingContext do
+  @moduledoc """
+  承载运行时的上下文。
+  """
 
   @type t :: %__MODULE__{
           recipe: QyCore.Recipe.t(),

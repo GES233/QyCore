@@ -2,7 +2,7 @@ defmodule QyCore.Recipe do
   @moduledoc """
   `QyCore.Recipe` 定义了数据处理流程。
 
-  ### 构成与职责
+  ## 构成与职责
 
   它由一系列 `QyCore.Recipe.Step` 组成，按特定顺序或图结构进行编排，共同完成复杂计算。
 
@@ -12,7 +12,7 @@ defmodule QyCore.Recipe do
 
   它支持线性流程以及更复杂的图结构的流程。
 
-  ### 命名规范
+  ## 命名规范
 
   实现 `QyCore.Recipe` 部分暂定统一需要包含
   `QyRecipe.<%= your_recipe_name_with_camel_name %>` 的内容。

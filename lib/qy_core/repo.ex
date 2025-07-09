@@ -1,5 +1,5 @@
 defmodule QyCore.Repo do
-  @moduledoc "定义大容量数据的仓库（可以有多种实现）。"
+  @moduledoc "定义存储大容量数据的仓库（可以有多种实现）。"
 
   @type repo_name :: pid() | atom()
   @type refkey :: any()
