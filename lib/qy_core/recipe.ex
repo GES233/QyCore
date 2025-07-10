@@ -31,6 +31,12 @@ defmodule QyCore.Recipe do
 
   alias QyCore.Recipe.Step, as: S
 
+  @type t :: %__MODULE__{}
+  defstruct [:steps, :integredient]
+
+  # Add inputs/outputs
+  @type as_step :: {module(), any()}
+
   # 线性 / DAG
-  @type t :: [S.t()] | {[S.t()], :digraph.graph()}
+  @type steps :: [S.t()] | {[S.t()], :digraph.graph()}
 end

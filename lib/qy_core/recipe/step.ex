@@ -8,6 +8,10 @@ defmodule QyCore.Recipe.Step do
 
   ## `Step` 的规范
 
+  虽然 `QyCore.Recipe.Step` 的灵感来源于 Elixir 生态中非常重要的
+  [`Plug`](https://hexdocs.pm/plug) ，但是其命名以及执行机制和 Plug
+  有较大的差别。
+
   ### `Step` 的生命周期
 
   执行一个 `Step` 分成两步：
@@ -19,14 +23,14 @@ defmodule QyCore.Recipe.Step do
 
   一般来讲，Step 本身处理的数据并非 Param 。除非额外设置。
 
+  ### 用于 Step 的选项
+
   ### 钩子
 
   * `__after_call_success__`
   * `__after_call_failuer__`
 
   ## 实现自己的 `QyCore.Recipe.Step`
-
-  虽然 `QyCore.Recipe.Step` 的灵感来源于 Elixir 生态中非常重要的 [`Plug`](https://hexdocs.pm/plug) 。
 
   ### 作为模块
 
@@ -40,6 +44,8 @@ defmodule QyCore.Recipe.Step do
 
   参见 `t:t/0` 。
   """
+
+  alias QyCore.{Param, Recipe}
 
   @typedoc "Step 处理的数据本体"
   @type data :: any() | tuple()
@@ -60,20 +66,17 @@ defmodule QyCore.Recipe.Step do
   @type function_step ::
           {(data(), options() -> data()),
            input_keys: input_keys(), output_keys: output_keys(), opts: options()}
-  @type step_required_param ::
-          {module(), :required_param,
-           input_keys: input_keys(), output_keys: output_keys(), opts: options()}
-  # 稍微提一嘴：这里的执行过程是把 param 本体丢到 init/1 的 options 里
+  # 稍微提一嘴：这里的执行过程是把 param 本体丢到 ready/2 的 options 里
   # 因为如果数据本体容量很大，再处理来还得复制几份…
 
   @typedoc """
-  Step 类型。
+  Step 所包括的类型。
 
   将 `input_keys/output_keys` 与 step 分开的原因在于其输入输出的具体名字更多的用于 `QyCore.Recipe` 的调度。
   """
-  @type t :: module_step() | function_step() | step_required_param()
+  @type t :: module_step() | function_step() | Recipe.as_step()
 
-  @callback init(options()) :: options()
+  @callback ready(options(), Param.t()) :: options()
 
   @callback call(data(), options()) :: data()
 
