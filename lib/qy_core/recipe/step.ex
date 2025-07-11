@@ -12,16 +12,14 @@ defmodule QyCore.Recipe.Step do
   [`Plug`](https://hexdocs.pm/plug) ，但是其命名以及执行机制和 Plug
   有较大的差别。
 
+  在 `QyCore.Recipe` 中，一个 `QyCore.Recipe.Step` 被定义为一个元组：`{implementation, config}`。
+
+  - 其中 `implementation` 可以是一个实现了 `@behaviour QyCore.Recipe.Step` 的模块或一个函数。
+  - `config` 是一个关键字列表，用于配置该 Step 在 Recipe 中的行为。
+
   ### `Step` 的生命周期
 
-  执行一个 `Step` 分成两步：
-
-  * 参数的预处理 - 输入为全局的选项，对其进行处理得到运算可能需要的选项（具体逻辑由 Step
-  编写者编写的回调、QyCore 的规范以及钩子决定）。
-
-  * 数据的处理 - 输入为数据本体以及处理后的选项，经过计算得到结果。
-
-  一般来讲，Step 本身处理的数据并非 Param 。除非额外设置。
+  TBD
 
   ### 用于 Step 的选项
 
@@ -45,40 +43,57 @@ defmodule QyCore.Recipe.Step do
   参见 `t:t/0` 。
   """
 
-  alias QyCore.{Param, Recipe}
+  alias QyCore.Runner.CookingContext
 
-  @typedoc "Step 处理的数据本体"
-  @type data :: any() | tuple()
-  # 这个 options 要有几个特点：
-  # 读取简易、可以插入新值
-  # 所以没法照搬 Plug 的 t:opts/0
-  @typedoc "用于 Step 的选项类型"
-  @type options :: tuple() | map() | list() | struct() | MapSet.t()
+  @typedoc "用于标识 Param 或 Ingredient 的键"
+  @type key :: atom()
 
-  # 仅有一个值的话可以以原子形式保存
-  @typedoc "输入数据的语义名称组成的元组"
-  @type input_keys :: atom() | tuple()
-  @typedoc "输出数据的语义名称组成的元组"
-  @type output_keys :: atom() | tuple()
+  @typedoc "由多个 key 组成的元组，用于定义多输入或多输出"
+  @type keys :: key() | tuple()
 
-  @type module_step ::
-          {module(), input_keys: input_keys(), output_keys: output_keys(), opts: options()}
-  @type function_step ::
-          {(data(), options() -> data()),
-           input_keys: input_keys(), output_keys: output_keys(), opts: options()}
-  # 稍微提一嘴：这里的执行过程是把 param 本体丢到 ready/2 的 options 里
-  # 因为如果数据本体容量很大，再处理来还得复制几份…
+  @typedoc "传递给 Step 内部，用于计算的选项"
+  @type step_opts :: keyword()
 
   @typedoc """
-  Step 所包括的类型。
-
-  将 `input_keys/output_keys` 与 step 分开的原因在于其输入输出的具体名字更多的用于 `QyCore.Recipe` 的调度。
+  在 `Recipe.steps` 列表中，用于配置单个 Step 的关键字列表。
   """
-  @type t :: module_step() | function_step() | Recipe.as_step()
+  @type config :: [
+          {:input_keys, keys()}
+          | {:output_keys, keys()}
+          | {:mode, :values | :params}
+          | {:resources, [key()]}
+          | {:opts, step_opts()}
+        ]
 
-  @callback ready(options(), Param.t()) :: options()
+  @typedoc """
+  一个 Step 的具体实现，可以是模块或函数。
+  """
+  @type implementation :: module() | function()
 
-  @callback call(data(), options()) :: data()
+  @typedoc """
+  在 `Recipe` 中定义的单个 Step 的完整形态。
+  """
+  @type t :: {implementation(), config()}
+
+  @doc """
+  执行 Step 的核心计算逻辑。
+
+  - `inputs`: 根据 `config` 中 `:mode` 的设置，此参数的类型会有所不同。
+    - 当 `mode: :values` (默认) 时, `inputs` 是一个包含具体值的元组, 例如 `{"hello", 123}`。
+    - 当 `mode: :params` 时, `inputs` 是一个包含完整 `%Param{}` 结构体的列表。
+  - `resources`: 一个 Map，包含了该 Step 所依赖的、已经 `prepare` 好的 `Ingredient` 句柄。
+     例如 `%{calc_model: #Reference<...>, repo_conn: #PID<...>}`。
+  - `opts`: 来自 `config` 中 `:opts` 字段的、用于本次计算的选项。
+  """
+  @callback run(
+              inputs :: tuple() | CookingContext.param_maps(),
+              resources :: map(),
+              opts :: step_opts()
+            ) :: {:ok, tuple()} | {:error, any()}
+
+  # @callback ready(options(), Param.t()) :: options()
+
+  # @callback call(data(), options()) :: data()
 
   # @callback hooks() :: %{atom() => function()}
 
