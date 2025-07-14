@@ -5,19 +5,19 @@ defmodule QyCore.Runner.CookingContext do
 
   @type t :: %__MODULE__{
           recipe: QyCore.Recipe.t(),
-          options: any(),
+          recipe_options: any(),
           param_maps: param_maps(),
-          ingredients: ingredients()
+          instruments: instruments()
         }
   defstruct [
     :recipe,
     # 这里的 options 是全局的
-    :options,
+    :recipe_options,
     :param_maps,
-    :ingredients
+    :instruments
   ]
 
   @type param_maps :: %{atom() => QyCore.Param.t()}
 
-  @type ingredients :: %{atom() => QyCore.Ingredient.t()}
+  @type instruments :: %{atom() => QyCore.Instrument.t()}
 end

@@ -1,4 +1,4 @@
-defmodule QyCore.Ingredient do
+defmodule QyCore.Instrument do
   @moduledoc """
   管理存在副作用的数据或资源（e.g. ONNX 模型或数据库）的生命周期。
 
@@ -10,7 +10,7 @@ defmodule QyCore.Ingredient do
   @type data :: any()
 
   @typedoc "一般是实现了回调的模块"
-  @type t :: module()
+  @type t :: {module(), options()}
 
   @callback prepare(options()) :: {:ok, data()} | {:has_already, data()} | {:error, term()}
 
