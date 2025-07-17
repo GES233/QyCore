@@ -17,11 +17,13 @@ defmodule QyCore.Recipe.Step do
   - 其中 `implementation` 可以是一个实现了 `@behaviour QyCore.Recipe.Step` 的模块或一个函数。
   - `config` 是一个关键字列表，用于配置该 Step 在 Recipe 中的行为。
 
-  ### `Step` 的生命周期
-
-  TBD
-
   ### 用于 Step 的选项
+
+  - 输入输出的**语义名称**
+    - `:input_keys`
+    - `:output_keys`
+  - 模式
+  - `:opts`
 
   ### 钩子
 
@@ -45,25 +47,35 @@ defmodule QyCore.Recipe.Step do
 
   alias QyCore.Runner.CookingContext
 
-  @typedoc "用于标识 Param 或 Ingredient 的键"
+  @typedoc "用于标识 Param 或 Instrument 的键"
   @type key :: atom()
 
   @typedoc "由多个 key 组成的元组，用于定义多输入或多输出"
   @type keys :: key() | tuple()
 
   @typedoc "传递给 Step 内部，用于计算的选项"
-  @type step_opts :: keyword()
+  @type step_opts ::
+          binary
+          | tuple
+          | atom
+          | integer
+          | float
+          | keyword
+          # 允许嵌套（因为 NestedRecipe 的存在）
+          | [step_opts]
+          | %{optional(step_opts) => step_opts}
+
+  @type allowed_config_items ::
+          {:input_keys, keys()}
+          | {:output_keys, keys()}
+          | {:mode, :values | :params}
+          | {:instruments, [key()]}
+          | {:opts, step_opts()}
 
   @typedoc """
   在 `Recipe.steps` 列表中，用于配置单个 Step 的关键字列表。
   """
-  @type config :: [
-          {:input_keys, keys()}
-          | {:output_keys, keys()}
-          | {:mode, :values | :params}
-          | {:resources, [key()]}
-          | {:opts, step_opts()}
-        ]
+  @type config :: [allowed_config_items()]
 
   @typedoc """
   一个 Step 的具体实现，可以是模块或函数。
