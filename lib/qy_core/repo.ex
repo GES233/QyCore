@@ -1,17 +1,20 @@
 defmodule QyCore.Repo do
   @moduledoc "定义存储大容量数据的仓库（可以有多种实现）。"
 
+  @typedoc "其他模块/进程可找到该仓库的渠道"
   @type repo_name :: pid() | atom()
+  @typedoc "用于定位数据的键"
   @type refkey :: any()
+  @typedoc "数据本体"
   @type data :: any()
 
   @callback ready(any()) :: pid() | no_return()
 
-  @callback get(repo_name(), refkey()) :: {:ok, data()} | {:error, term()}
+  @callback get(refkey()) :: {:ok, data()} | {:error, term()}
 
-  @callback put(repo_name(), data()) :: {:ok, refkey()} | {:error, term()}
+  @callback put(data()) :: {:ok, refkey()} | {:error, term()}
 
-  @callback delete(repo_name(), refkey()) :: :ok | {:error, term()}
+  @callback delete(refkey()) :: :ok | {:error, term()}
 
   @doc "创建一个新的 refkey"
   @spec gen_refkey() :: refkey()
