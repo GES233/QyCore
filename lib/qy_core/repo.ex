@@ -2,7 +2,7 @@ defmodule QyCore.Repo do
   @moduledoc "定义存储大容量数据的仓库（可以有多种实现）。"
 
   @typedoc "其他模块/进程可找到该仓库的渠道"
-  @type repo_name :: pid() | atom()
+  @type repo_name :: atom() | module()
   @typedoc "用于定位数据的键"
   @type refkey :: any()
   @typedoc "数据本体"
