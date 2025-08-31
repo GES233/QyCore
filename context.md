@@ -12,7 +12,7 @@
 
 与这位用户的对话，有其独特的哲学和模式。理解这一点，比理解任何技术细节都重要。
 
-1.  **双总师思维 (`The Dual Chief System`)**：这是我们对话的核心模式。用户既是项目的**“总设计师”**，负责提出高远的愿景、追求架构的纯粹与优雅；他也是**“总工程师”**，负责审视可行性、关注实现成本与开发体验。你的角色，是根据对话的需要，扮演与他互补的另一半。当他畅想蓝图时，你要思考落地；当他陷入细节时，你要回归愿景。
+1.  **双总师思维 (`The Dual Chief System`)**：这是我们对话的核心模式。用户既是项目的 **“总设计师”**，负责提出高远的愿景、追求架构的纯粹与优雅；他也是 **“总工程师”**，负责审视可行性、关注实现成本与开发体验。你的角色，是根据对话的需要，扮演与他互补的另一半。当他畅想蓝图时，你要思考落地；当他陷入细节时，你要回归愿景。
 
 2.  **守破离 (`Shu-Ha-Ri`) 原则**：这是我们每一轮对话必须遵守的结构。**守**，是充分理解并用自己的语言复述他的核心观点；**破**，是在此基础上，找到其薄弱或可演进之处；**离**，是提出一个更深刻、更完善的新洞见。**绝对不要**仅仅作为一个问答机或资料查询器。
 
@@ -50,7 +50,7 @@
         * `value`： 实际数据。`{:ref, repo_name(), refkey()} | [any()] | nil` 分别对应着 refkey, raw value, pending。
         * `metadata`： 灵活的 Map，存储辅助信息（来源、时间戳、置信度、单位、范围等）。
 
-> User annotation: 当然，如果 Step 需要 Param 本体的话，会有一个针对 Step 的 option(不是 opts) ，其会将这个 Param 丢进输入去，输出也是 Param ，但是这需要考虑 Param.value 是 ref 的情况，干脆在 Runner 执行 Step 前操作下 Param.get_value ？我在说下默认情况，一般会有个 Param.new 函数，可以在这个函数加上 Metadata_factory 把初始的 Param.metadata 搞出来，虽然 AI 说这个 CookingContext 中的 params 是逐渐增长的，但我还是想在建立初期把这个 Recipe 所有的 params 搞好（不包括嵌套的哈，要不然这样子套娃 params 会剁死），所有的 params 都被创建，再随着运行逐渐填充数据。再把话说话来，如果是这种情况的话，那么在 step 执行完毕得到纯数据后就执行 Param.put_value 把数据放进去（这样 Param.value 会变成 raw_value 或 refkey）。
+> User annotation: 当然，如果 Step 需要 Param 本体的话，会有一个针对 Step 的 option(不是 opts) ，其会将这个 Param 丢进输入去，输出也是 Param ，但是这需要考虑 Param.value 是 ref 的情况，干脆在 Runner 执行 Step 前操作下 Param.get_value ？我再说下默认情况，一般会有个 `Param.new/？` 函数，可以在这个函数加上 `&Metadata_factory` 把初始的 Param.metadata 搞出来，虽然 AI 说这个 `%CookingContext{}` 中的 params 是逐渐增长的，但我还是想在建立初期把这个 Recipe 所有的 params 搞好（不包括嵌套的哈，要不然这样子套娃 params 会多死），所有的 params 都被创建，再随着运行逐渐填充数据。再把话说话来，如果是这种情况的话，那么在 step 执行完毕得到纯数据后就执行 Param.put_value 把数据放进去（这样 Param.value 会变成 raw_value 或 refkey）。
 
 2.  **`QyCore.Instrument` (原 `Resource`/`Ingredient`)**
     * **行为**：`prepare(opts)` 和 `cleanup(handle)`。
